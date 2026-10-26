@@ -1,0 +1,98 @@
+# Lokale miljoefiler og hemmeligheder
+.env
+.env.*
+!.env.example
+!.env.sample
+appsettings.Local.json
+appsettings.*.Local.json
+secrets.json
+*.pfx
+*.p12
+*.pem
+*.key
+*.jks
+*.keystore
+*.p8
+*.mobileprovision
+
+# JavaScript, TypeScript og Expo
+node_modules/
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+*.tsbuildinfo
+.metro-health-check*
+.cache/
+.npm/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Genererede native projekter (Expo)
+/mobile/android/
+/mobile/ios/
+.gradle/
+.kotlin/
+*.apk
+*.aab
+*.ipa
+
+# .NET build, pakker og testresultater
+**/[Bb]in/
+**/[Oo]bj/
+artifacts/
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
+*.trx
+*.nupkg
+*.snupkg
+
+# Visual Studio og personlige editorindstillinger
+.vs/
+*.csproj.user
+*.vbproj.user
+*.sln.docstates
+*.suo
+*.userosscache
+*.sln.ide
+*.pubxml.user
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+*.code-workspace
+*.swp
+*.swo
+
+# Lokale databaser og PostgreSQL-volumener
+*.sqlite
+*.sqlite3
+*.sqlite-wal
+*.sqlite-shm
+*.sqlite3-wal
+*.sqlite3-shm
+/data/
+/postgres-data/
+
+# Logfiler og midlertidige filer
+*.log
+*.tmp
+*.temp
+*.bak
+*.orig
+*.orig.*
+
+# Office, Windows og macOS
+~$*
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Kildekode, migrations, appsettings.json, launchSettings.json,
+# package-lock.json, solution-filer og dokumentation skal versionsstyres.
