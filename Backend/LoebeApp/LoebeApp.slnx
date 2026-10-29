@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="LoebeApp.Tests/LoebeApp.Tests.csproj" Id="ac861a82-e808-4adf-a5e2-02e2b2cfb6e4" />
   <Project Path="LoebeApp/LoebeApp.csproj" />
 </Solution>
