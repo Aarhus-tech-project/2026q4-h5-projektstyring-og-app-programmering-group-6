@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using LoebeApp.Models;
 
 namespace LoebeApp.Data
 {
@@ -7,6 +8,17 @@ namespace LoebeApp.Data
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
+        }
+
+        public DbSet<User> Users { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        { 
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<User>()
+                .HasIndex(user => user.Email)
+                .IsUnique();
         }
     }
 }
