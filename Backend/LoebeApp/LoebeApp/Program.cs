@@ -138,9 +138,14 @@ if (app.Environment.IsDevelopment())
     {
         options.SwaggerEndpoint("/openapi/v1.json", "LøbeApp APIv1");
     });
+
 }
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+
+}
 
 app.UseAuthentication();
 
