@@ -10,7 +10,6 @@ namespace LoebeApp.DTOs
         public required string Email { get; set; }
 
         [Required]
-        [MinLength(10)]
         public required string Password { get; set; }
     }
 }
