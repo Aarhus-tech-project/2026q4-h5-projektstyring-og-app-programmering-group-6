@@ -1,6 +1,7 @@
 import { View } from "react-native";
 import { Button, Text } from "react-native-paper";
 import { useAuth } from "../../auth/context/useAuth";
+import { router } from "expo-router";
 
 export default function HomeScreen() {
   const { signOut } = useAuth();
@@ -15,12 +16,13 @@ export default function HomeScreen() {
 
   return (
     <View style={{ flex: 1, padding: 24, gap: 16 }}>
-      <Text variant="headlineMedium">LøbeApp</Text>
-
       <Text>Du er logget ind.</Text>
 
       <Button mode="outlined" onPress={handleLogout}>
         Log ud
+      </Button>
+      <Button mode="contained" onPress={() => router.push("/activity")}>
+        Start aktivitet
       </Button>
     </View>
   );
