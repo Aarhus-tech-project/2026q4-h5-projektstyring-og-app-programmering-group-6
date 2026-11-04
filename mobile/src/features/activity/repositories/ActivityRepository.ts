@@ -56,4 +56,21 @@ async updateActivity(activity: Activity): Promise<void> {
     throw new Error("Aktiviteten kunne ikke opdateres.");
   }
 }
+
+async deleteCompletedActivity(
+  activityId: string,
+  userId: number
+): Promise<void> {
+  const result = await this.database.runAsync(
+    `DELETE FROM Activity
+     WHERE Id = ? AND UserId = ? AND Status = ?;`,
+    activityId,
+    userId,
+    "completed"
+  );
+
+  if (result.changes !== 1) {
+    throw new Error("Den lokale aktivitet kunne ikke slettes.");
+  }
+}
 }

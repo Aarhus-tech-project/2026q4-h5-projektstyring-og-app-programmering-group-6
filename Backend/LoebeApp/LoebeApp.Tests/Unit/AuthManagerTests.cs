@@ -1,7 +1,8 @@
-﻿using LoebeApp.Managers;
+﻿using LoebeApp.Managers.Auth;
+using LoebeApp.DTOs.Auth;
 using LoebeApp.Models;
-using LoebeApp.Repositories;
-using LoebeApp.Security;
+using LoebeApp.Repositories.Users;
+using LoebeApp.Security.Tokens;
 using LoebeApp.Tests.Builders;
 using LoebeApp.Exceptions;
 using Microsoft.AspNetCore.Identity;
@@ -64,7 +65,7 @@ namespace LoebeApp.Tests.Unit
                 passwordHasher,
                 Substitute.For<ITokenProvider>());
 
-            var request = new DTOs.LoginRequest
+            var request = new LoginRequest
             {
                 Email = user.Email,
                 Password = "WrongPassword123!"
@@ -81,7 +82,7 @@ namespace LoebeApp.Tests.Unit
             // Arrange
             var repository = Substitute.For<IUserRepository>();
 
-            var request = new DTOs.LoginRequest
+            var request = new LoginRequest
             {
                 Email = "unknown@example.com",
                 Password = "TestPassword123!"

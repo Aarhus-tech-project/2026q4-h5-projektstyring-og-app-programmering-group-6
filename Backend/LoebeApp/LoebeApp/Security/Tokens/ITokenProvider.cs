@@ -1,7 +1,7 @@
-﻿using LoebeApp.DTOs;
+﻿using LoebeApp.DTOs.Auth;
 using LoebeApp.Models;
 
-namespace LoebeApp.Security
+namespace LoebeApp.Security.Tokens
 {
     public interface ITokenProvider
     {

@@ -2,7 +2,7 @@
 using LoebeApp.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace LoebeApp.Repositories
+namespace LoebeApp.Repositories.Users
 {
     public class UserRepository 
         (AppDbContext context) 

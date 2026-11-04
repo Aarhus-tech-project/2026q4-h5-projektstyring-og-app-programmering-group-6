@@ -1,5 +1,5 @@
 ﻿using LoebeApp.Configuration;
-using LoebeApp.DTOs;
+using LoebeApp.DTOs.Auth;
 using LoebeApp.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -7,7 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace LoebeApp.Security
+namespace LoebeApp.Security.Tokens
 {
     public class TokenProvider(
         IOptions<JwtOptions> jwtOptions) : ITokenProvider

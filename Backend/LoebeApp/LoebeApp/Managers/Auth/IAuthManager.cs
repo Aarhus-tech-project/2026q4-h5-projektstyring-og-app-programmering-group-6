@@ -1,6 +1,6 @@
-﻿using LoebeApp.DTOs;
+﻿using LoebeApp.DTOs.Auth;
 
-namespace LoebeApp.Managers
+namespace LoebeApp.Managers.Auth
 {
     public interface IAuthManager
     {

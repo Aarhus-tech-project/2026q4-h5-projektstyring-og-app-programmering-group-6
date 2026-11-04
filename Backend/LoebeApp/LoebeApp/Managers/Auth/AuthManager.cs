@@ -1,12 +1,12 @@
 ﻿using LoebeApp.Models;
-using LoebeApp.Repositories;
-using LoebeApp.DTOs;
+using LoebeApp.Repositories.Users;
+using LoebeApp.DTOs.Auth;
 using LoebeApp.Exceptions;
-using LoebeApp.Security;
+using LoebeApp.Security.Tokens;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
-namespace LoebeApp.Managers
+namespace LoebeApp.Managers.Auth
 {
     public class AuthManager(
         IUserRepository userRepository,

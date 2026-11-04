@@ -3,6 +3,9 @@ import type { Activity } from "../models/activity";
 import type { ActivityRepository } from "../repositories/ActivityRepository";
 import type { GpsPointRepository } from "../repositories/GpsPointRepository";
 import type { NewGpsPoint } from "../models/gpsPoint";
+import { activityModelToDto } from "../mappers/activityModelToDto";
+import { calculateRouteDistanceMeters } from "../calculations/distance";
+import { uploadActivity } from "../api/activityApi";
 
 export class ActivityManager {
   constructor(
@@ -53,6 +56,46 @@ export class ActivityManager {
   await this.repository.updateActivity(completedActivity);
 
   return completedActivity;
+}
+
+async uploadCompletedActivity(
+  activityId: string,
+  userId: number,
+  accessToken: string
+): Promise<void> {
+  const activity = await this.repository.getActivity(activityId, userId);
+
+  if (activity === null) {
+    throw new Error("Aktiviteten blev ikke fundet.");
+  }
+
+  if (activity.status !== "completed") {
+    throw new Error("Aktiviteten skal være afsluttet før upload.");
+  }
+
+  const gpsPoints = await this.gpsPointRepository.getGpsPoints(
+    activityId,
+    userId
+  );
+
+  const distanceMeters = calculateRouteDistanceMeters(gpsPoints);
+
+  const request = activityModelToDto(
+    activity,
+    gpsPoints,
+    distanceMeters
+  );
+
+  await uploadActivity(request, accessToken);
+
+  try {
+  await this.repository.deleteCompletedActivity(activityId, userId);
+  } 
+  catch {
+  throw new Error(
+    "Aktiviteten er gemt på serveren, men de lokale data kunne ikke ryddes op."
+  );
+  }
 }
 
 async recordPosition(
