@@ -1,10 +1,10 @@
 ﻿using LoebeApp.Configuration;
-using LoebeApp.DTOs;
+using LoebeApp.DTOs.Auth;
 using LoebeApp.Exceptions;
-using LoebeApp.Managers;
+using LoebeApp.Managers.Auth;
 using LoebeApp.Models;
-using LoebeApp.Repositories;
-using LoebeApp.Security;
+using LoebeApp.Repositories.Users;
+using LoebeApp.Security.Tokens;
 using LoebeApp.Tests.Builders;
 using LoebeApp.Tests.Setup;
 using Microsoft.AspNetCore.Identity;

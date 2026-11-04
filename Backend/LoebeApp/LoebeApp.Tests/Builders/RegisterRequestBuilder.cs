@@ -1,4 +1,4 @@
-﻿using LoebeApp.DTOs;
+﻿using LoebeApp.DTOs.Auth;
 
 namespace LoebeApp.Tests.Builders
 {

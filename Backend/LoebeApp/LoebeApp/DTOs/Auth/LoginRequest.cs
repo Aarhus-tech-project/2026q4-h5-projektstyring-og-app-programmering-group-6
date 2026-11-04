@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace LoebeApp.DTOs
+namespace LoebeApp.DTOs.Auth
 {
     public class LoginRequest
     {

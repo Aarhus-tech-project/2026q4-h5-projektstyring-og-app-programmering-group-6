@@ -12,6 +12,8 @@ namespace LoebeApp.Data
 
         public DbSet<User> Users { get; set; }
 
+        public DbSet<Activity> Activities { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         { 
             base.OnModelCreating(modelBuilder);
@@ -19,6 +21,16 @@ namespace LoebeApp.Data
             modelBuilder.Entity<User>()
                 .HasIndex(user => user.Email)
                 .IsUnique();
+
+            modelBuilder.Entity<Activity>()
+                .HasOne<User>()
+                .WithMany()
+                .HasForeignKey(activity => activity.UserId);
+
+            modelBuilder.Entity<Activity>()
+                .ComplexCollection(activity => activity.GpsPoints)
+                .ToJson("GpsPoints")
+                .HasColumnType("jsonb");
         }
     }
 }

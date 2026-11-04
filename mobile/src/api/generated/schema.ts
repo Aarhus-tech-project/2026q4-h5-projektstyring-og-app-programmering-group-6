@@ -86,16 +86,39 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/WeatherForecast": {
+    "/api/activities": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["GetWeatherForecast"];
+        get?: never;
         put?: never;
-        post?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["CreateActivityRequest"];
+                    "text/json": components["schemas"]["CreateActivityRequest"];
+                    "application/*+json": components["schemas"]["CreateActivityRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
         delete?: never;
         options?: never;
         head?: never;
@@ -106,6 +129,27 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        CreateActivityRequest: {
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            startedAt: string;
+            /** Format: int32 */
+            durationSeconds: number | string;
+            /** Format: double */
+            distanceMeters: number | string;
+            gpsPoints: components["schemas"]["GpsPointRequest"][];
+        };
+        GpsPointRequest: {
+            /** Format: double */
+            latitude: number | string;
+            /** Format: double */
+            longitude: number | string;
+            /** Format: int32 */
+            elapsedMilliseconds: number | string;
+            /** Format: double */
+            accuracyMeters: number | string;
+        };
         LoginRequest: {
             email: string;
             password: string;
@@ -119,15 +163,6 @@ export interface components {
             email: string;
             password: string;
         };
-        WeatherForecast: {
-            /** Format: date */
-            date?: string;
-            /** Format: int32 */
-            temperatureC?: number | string;
-            /** Format: int32 */
-            temperatureF?: number | string;
-            summary?: null | string;
-        };
     };
     responses: never;
     parameters: never;
@@ -136,27 +171,4 @@ export interface components {
     pathItems: never;
 }
 export type $defs = Record<string, never>;
-export interface operations {
-    GetWeatherForecast: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "text/plain": components["schemas"]["WeatherForecast"][];
-                    "application/json": components["schemas"]["WeatherForecast"][];
-                    "text/json": components["schemas"]["WeatherForecast"][];
-                };
-            };
-        };
-    };
-}
+export type operations = Record<string, never>;

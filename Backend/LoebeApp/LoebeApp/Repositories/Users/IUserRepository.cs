@@ -1,6 +1,6 @@
 ﻿using LoebeApp.Models;
 
-namespace LoebeApp.Repositories
+namespace LoebeApp.Repositories.Users
 {
     public interface IUserRepository
     {

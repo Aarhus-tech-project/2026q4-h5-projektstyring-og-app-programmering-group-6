@@ -1,10 +1,12 @@
 using LoebeApp.Configuration;
 using LoebeApp.Data;
 using LoebeApp.ErrorHandling;
-using LoebeApp.Managers;
+using LoebeApp.Managers.Auth;
 using LoebeApp.Models;
-using LoebeApp.Repositories;
-using LoebeApp.Security;
+using LoebeApp.Repositories.Users;
+using LoebeApp.Security.Tokens;
+using LoebeApp.Managers.Activities;
+using LoebeApp.Repositories.Activities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -121,9 +123,11 @@ builder.Services
 
 //repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
 
 //managers
 builder.Services.AddScoped<IAuthManager, AuthManager>();
+builder.Services.AddScoped<IActivityManager, ActivityManager>();
 
 var app = builder.Build();
 

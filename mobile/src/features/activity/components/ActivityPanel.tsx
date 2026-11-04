@@ -35,7 +35,7 @@ export default function ActivityPanel({
           )}
 
           {activity.status === "completed" && (
-            <Text>Aktiviteten er afsluttet og gemt lokalt.</Text>
+            <Text>Aktiviteten er afsluttet.</Text>
           )}
         </>
       )}

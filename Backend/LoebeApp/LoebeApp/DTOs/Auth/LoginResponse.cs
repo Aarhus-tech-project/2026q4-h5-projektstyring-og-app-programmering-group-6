@@ -1,4 +1,4 @@
-﻿namespace LoebeApp.DTOs
+﻿namespace LoebeApp.DTOs.Auth
 {
     public class LoginResponse
     {

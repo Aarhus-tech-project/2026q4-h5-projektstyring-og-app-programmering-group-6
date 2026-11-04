@@ -17,7 +17,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function ActivityScreen() {
   const database = useSQLiteContext();
-  const { userId } = useAuth();
+  const { userId, session } = useAuth();
   const insets = useSafeAreaInsets();
   const theme = useTheme();
 
@@ -134,6 +134,20 @@ export default function ActivityScreen() {
 
       setActivity(completedActivity);
       setElapsedSeconds(completedActivity.durationSeconds);
+
+      if (session === null) {
+        throw new Error(
+          "Aktiviteten er gemt lokalt, men du skal logge ind igen før upload.",
+        );
+      }
+
+      await manager.uploadCompletedActivity(
+        completedActivity.id,
+        userId,
+        session.accessToken,
+      );
+
+      alert("Aktiviteten er gemt på serveren.");
     } catch (error) {
       const message =
         error instanceof Error
