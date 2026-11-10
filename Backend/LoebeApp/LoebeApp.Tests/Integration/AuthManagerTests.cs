@@ -2,7 +2,7 @@
 using LoebeApp.DTOs.Auth;
 using LoebeApp.Exceptions;
 using LoebeApp.Managers.Auth;
-using LoebeApp.Models;
+using LoebeApp.Models.Users;
 using LoebeApp.Repositories.Users;
 using LoebeApp.Security.Tokens;
 using LoebeApp.Tests.Builders;

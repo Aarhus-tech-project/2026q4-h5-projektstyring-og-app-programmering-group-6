@@ -18,6 +18,7 @@ namespace LoebeApp.ErrorHandling
             {
                 EmailAlreadyInUseException => StatusCodes.Status409Conflict,
                 InvalidCredentialsException => StatusCodes.Status401Unauthorized,
+                ActivityNotFoundException => StatusCodes.Status404NotFound,
                 ValidationException => StatusCodes.Status400BadRequest,
                 _ when IsDatabaseConnectionFailure(exception)
                     => StatusCodes.Status503ServiceUnavailable,

@@ -26,8 +26,12 @@ export default function ActivityPanel({
     <View style={{ padding: 20, gap: 12 }}>
       {activity !== null && (
         <>
-          <Text>Varighed: {elapsedSeconds} sekunder</Text>
-
+          <Text>
+            Varighed:{" "}
+            {elapsedSeconds < 60
+              ? `${elapsedSeconds} sek`
+              : `${Math.floor(elapsedSeconds / 60)} min ${elapsedSeconds % 60} sek`}
+          </Text>
           <Text>Distance: {(distanceMeters / 1000).toFixed(2)} km</Text>
 
           {activity.status === "active" && (

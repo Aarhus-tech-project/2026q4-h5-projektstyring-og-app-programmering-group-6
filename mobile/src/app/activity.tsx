@@ -1,5 +1,5 @@
 import ActivityScreen from "../features/activity/screens/ActivityScreen";
 
-export default function Activity() {
+export default function ActivityRoute() {
   return <ActivityScreen />;
 }

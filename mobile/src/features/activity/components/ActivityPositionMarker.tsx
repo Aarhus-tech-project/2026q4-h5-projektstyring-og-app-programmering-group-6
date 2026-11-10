@@ -5,20 +5,16 @@ import type { LatLng } from "react-native-maps";
 
 type ActivityPositionMarkerProps = {
   coordinate: LatLng;
-  directionDegrees: number;
 };
 
 export default function ActivityPositionMarker({
   coordinate,
-  directionDegrees,
 }: ActivityPositionMarkerProps) {
   return (
     <Marker
       coordinate={coordinate}
       title="Din position"
       anchor={{ x: 0.5, y: 0.5 }}
-      flat
-      rotation={directionDegrees}
     >
       <View style={{ width: 40, height: 40 }}>
         <MaterialCommunityIcons

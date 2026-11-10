@@ -147,7 +147,10 @@ export default function ActivityScreen() {
         session.accessToken,
       );
 
-      alert("Aktiviteten er gemt på serveren.");
+      router.replace({
+        pathname: "/activity-details",
+        params: { activityId: completedActivity.id },
+      });
     } catch (error) {
       const message =
         error instanceof Error

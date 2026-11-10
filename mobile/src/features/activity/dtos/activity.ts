@@ -5,3 +5,9 @@ export type CreateActivityRequest =
 
 export type GpsPointRequest =
   components["schemas"]["GpsPointRequest"];
+
+export type ActivitySummaryResponse =
+  components["schemas"]["ActivitySummaryResponse"];
+
+export type ActivityDetailsResponse =
+  components["schemas"]["ActivityDetailsResponse"];

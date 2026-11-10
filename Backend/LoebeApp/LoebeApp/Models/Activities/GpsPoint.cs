@@ -1,4 +1,4 @@
-﻿namespace LoebeApp.Models
+﻿namespace LoebeApp.Models.Activities
 {
     public class GpsPoint
     {
