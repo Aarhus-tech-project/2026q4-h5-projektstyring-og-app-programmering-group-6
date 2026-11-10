@@ -1,4 +1,4 @@
-﻿using LoebeApp.Models;
+﻿using LoebeApp.Models.Users;
 
 namespace LoebeApp.Repositories.Users
 {

@@ -65,7 +65,7 @@ namespace LoebeApp.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Activities");
+                    b.ToTable("Activities", (string)null);
                 });
 
             modelBuilder.Entity("LoebeApp.Models.User", b =>
@@ -89,7 +89,7 @@ namespace LoebeApp.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("LoebeApp.Models.Activity", b =>

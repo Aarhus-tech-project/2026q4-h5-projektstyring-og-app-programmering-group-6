@@ -2,7 +2,6 @@ using LoebeApp.Configuration;
 using LoebeApp.Data;
 using LoebeApp.ErrorHandling;
 using LoebeApp.Managers.Auth;
-using LoebeApp.Models;
 using LoebeApp.Repositories.Users;
 using LoebeApp.Security.Tokens;
 using LoebeApp.Managers.Activities;
@@ -15,6 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using Microsoft.AspNetCore.Authorization;
 using System.Text;
+using LoebeApp.Models.Users;
 
 var builder = WebApplication.CreateBuilder(args);
 

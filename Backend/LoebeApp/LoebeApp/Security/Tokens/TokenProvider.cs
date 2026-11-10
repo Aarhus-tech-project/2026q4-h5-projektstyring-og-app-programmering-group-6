@@ -1,6 +1,6 @@
 ﻿using LoebeApp.Configuration;
 using LoebeApp.DTOs.Auth;
-using LoebeApp.Models;
+using LoebeApp.Models.Users;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;

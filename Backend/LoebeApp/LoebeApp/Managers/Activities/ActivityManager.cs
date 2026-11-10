@@ -1,7 +1,8 @@
 ﻿using LoebeApp.DTOs.Activities;
-using LoebeApp.Models;
-using LoebeApp.Repositories.Activities;
+using LoebeApp.Exceptions;
 using LoebeApp.Mappers.Activities;
+using LoebeApp.Models.Activities;
+using LoebeApp.Repositories.Activities;
 using System.ComponentModel.DataAnnotations;
 
 namespace LoebeApp.Managers.Activities
@@ -22,8 +23,7 @@ namespace LoebeApp.Managers.Activities
                 averagePaceSeconds = request.DurationSeconds / (request.DistanceMeters / 1000);
             }
 
-            var activity = ActivityDtoToModel.Map(
-                request, userId, averagePaceSeconds);
+            var activity = ActivityDtoToModel.Map(request, userId, averagePaceSeconds);
 
             await activityRepository.AddActivityAsync(activity);
         }
@@ -48,6 +48,31 @@ namespace LoebeApp.Managers.Activities
                 previousElapsedMilliseconds = point.ElapsedMilliseconds;
             }
 
+        }
+
+        public async Task<List<ActivitySummaryResponse>> GetActivitiesByUserIdAsync(int userId)
+        {
+            var activities = await activityRepository.GetActivitiesByUserIdAsync(userId);
+
+            var activitySummary = 
+                activities.Select(activity => ActivitySummaryModelToDto.MapToSummary(activity)).ToList();
+
+            return activitySummary;
+        }
+
+        /// <inheritdoc/>
+        public async Task<ActivityDetailsResponse> GetActivityByIdAsync(Guid activityId, int userId)
+        {
+            var activity = await activityRepository.GetActivityByIdAsync(activityId, userId);
+
+            if (activity is null)
+            {
+                throw new ActivityNotFoundException();
+            }
+
+            var activityDetails = ActivityModelToDto.MapToDetails(activity);
+
+            return activityDetails;
         }
     }
 }

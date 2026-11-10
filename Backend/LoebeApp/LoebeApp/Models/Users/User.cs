@@ -1,4 +1,4 @@
-﻿namespace LoebeApp.Models
+﻿namespace LoebeApp.Models.Users
 {
     public class User
     {

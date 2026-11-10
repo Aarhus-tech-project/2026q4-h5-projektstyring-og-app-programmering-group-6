@@ -12,14 +12,16 @@ export async function login(
   }, 10_000);
 
   try {
-    const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(request),
-      signal: controller.signal,
-    });
+  const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify(request),
+  signal: controller.signal,
+  }).catch(() => {
+  throw new Error("Der opstod en fejl i forbindelsen til serveren.");
+});
 
     if (!response.ok) {
       const problem = await response.json().catch(() => null);
@@ -35,10 +37,6 @@ export async function login(
   } catch (error) {
     if (controller.signal.aborted) {
       throw new Error("Serveren svarede ikke.");
-    }
-
-    if (error instanceof TypeError) {
-      throw new Error("Der kunne ikke oprettes forbindelse til serveren.");
     }
 
     throw error;
@@ -64,7 +62,9 @@ export async function register(
       },
       body: JSON.stringify(request),
       signal: controller.signal,
-    });
+      }).catch(() => {
+      throw new Error("Der opstod en fejl i forbindelsen til serveren.");
+});
 
 if (!response.ok) {
   const problem = await response.json().catch(() => null);
@@ -82,10 +82,6 @@ if (!response.ok) {
   } catch (error) {
     if (controller.signal.aborted) {
       throw new Error("Serveren svarede ikke inden for 10 sekunder.");
-    }
-
-    if (error instanceof TypeError) {
-      throw new Error("Der kunne ikke oprettes forbindelse til serveren.");
     }
 
     throw error;

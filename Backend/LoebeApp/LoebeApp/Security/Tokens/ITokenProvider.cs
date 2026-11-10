@@ -1,5 +1,5 @@
 ﻿using LoebeApp.DTOs.Auth;
-using LoebeApp.Models;
+using LoebeApp.Models.Users;
 
 namespace LoebeApp.Security.Tokens
 {

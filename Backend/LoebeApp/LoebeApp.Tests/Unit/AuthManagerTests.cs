@@ -1,6 +1,5 @@
 ﻿using LoebeApp.Managers.Auth;
 using LoebeApp.DTOs.Auth;
-using LoebeApp.Models;
 using LoebeApp.Repositories.Users;
 using LoebeApp.Security.Tokens;
 using LoebeApp.Tests.Builders;
@@ -8,6 +7,7 @@ using LoebeApp.Exceptions;
 using Microsoft.AspNetCore.Identity;
 using NSubstitute;
 using System.ComponentModel.DataAnnotations;
+using LoebeApp.Models.Users;
 
 namespace LoebeApp.Tests.Unit
 {

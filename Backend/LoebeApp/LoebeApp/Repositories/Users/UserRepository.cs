@@ -1,5 +1,5 @@
 ﻿using LoebeApp.Data;
-using LoebeApp.Models;
+using LoebeApp.Models.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace LoebeApp.Repositories.Users

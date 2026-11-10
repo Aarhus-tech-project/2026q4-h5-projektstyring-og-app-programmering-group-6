@@ -1,5 +1,6 @@
 ﻿using LoebeApp.DTOs.Activities;
 using LoebeApp.Models;
+using LoebeApp.Models.Activities;
 
 namespace LoebeApp.Mappers.Activities
 {

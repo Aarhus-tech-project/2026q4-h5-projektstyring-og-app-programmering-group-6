@@ -14,21 +14,28 @@ export default function ActivityMap({
   points,
 }: ActivityMapProps) {
   const currentPosition = points[points.length - 1] ?? initialPosition;
-  const previousPosition = points[points.length - 2];
+  let directionDegrees = 0;
 
-  const directionDegrees = previousPosition
-    ? calculateDirectionDegrees(previousPosition, currentPosition)
-    : 0;
+  for (let index = points.length - 2; index >= 0; index--) {
+    const point = points[index];
 
+    if (
+      point.latitude !== currentPosition.latitude ||
+      point.longitude !== currentPosition.longitude
+    ) {
+      directionDegrees = calculateDirectionDegrees(point, currentPosition);
+      break;
+    }
+  }
   return (
     <MapView
       style={{ flex: 1 }}
       userInterfaceStyle="dark"
-      region={{
-        latitude: currentPosition.latitude,
-        longitude: currentPosition.longitude,
-        latitudeDelta: 0.0005,
-        longitudeDelta: 0.0005,
+      camera={{
+        center: currentPosition,
+        heading: directionDegrees,
+        pitch: 0,
+        zoom: 18,
       }}
     >
       {points.length >= 2 && (
@@ -38,10 +45,7 @@ export default function ActivityMap({
           strokeWidth={4}
         />
       )}
-      <ActivityPositionMarker
-        coordinate={currentPosition}
-        directionDegrees={directionDegrees}
-      />
+      <ActivityPositionMarker coordinate={currentPosition} />
     </MapView>
   );
 }

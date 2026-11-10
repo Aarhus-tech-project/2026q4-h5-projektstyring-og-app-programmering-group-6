@@ -6,6 +6,7 @@ import { initializeDatabase } from "../data/initializeDatabase";
 import { ThemeProvider } from "expo-router/react-navigation";
 import { StatusBar } from "expo-status-bar";
 import { appTheme, navigationTheme } from "../theme/theme";
+import AccountMenu from "../features/auth/components/AccountMenu";
 
 export const unstable_settings = {
   anchor: "index",
@@ -20,7 +21,13 @@ export default function RootLayout() {
         <SQLiteProvider databaseName="loebeapp.db" onInit={initializeDatabase}>
           <AuthProvider>
             <Stack>
-              <Stack.Screen name="index" options={{ title: "LøbeApp" }} />
+              <Stack.Screen
+                name="index"
+                options={{
+                  title: "LøbeApp",
+                  headerRight: () => <AccountMenu />,
+                }}
+              />
               <Stack.Screen name="register" options={{ title: "LøbeApp" }} />
               <Stack.Screen name="activity" options={{ headerShown: false }} />
             </Stack>
