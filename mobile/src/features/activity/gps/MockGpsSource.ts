@@ -1,19 +1,34 @@
+import { calculateDistanceMeters } from "../calculations/distance";
 import { mockRoute } from "./mockRoute";
+
+const secondsBetweenSamples = 2;
+const pauseSamples = 5;
+const halfwayIndex = Math.floor(mockRoute.length / 2);
 
 export class MockGpsSource {
   private pointIndex = 0;
+  private pauseSamplesRemaining = pauseSamples;
 
   getNextPosition() {
-    const position = mockRoute[this.pointIndex];
+    const previousPosition = mockRoute[this.pointIndex];
 
-    if (position === undefined) {
-      throw new Error("Mock-ruten indeholder ingen gyldig position.");
+    if (this.pauseSamplesRemaining > 0) {
+      this.pauseSamplesRemaining--;
+    } else if (this.pointIndex < mockRoute.length - 1) {
+      this.pointIndex++;
+
+      if (this.pointIndex === halfwayIndex) {
+        this.pauseSamplesRemaining = pauseSamples;
+      }
     }
 
-this.pointIndex = Math.min(this.pointIndex + 1, mockRoute.length - 1);
+    const position = mockRoute[this.pointIndex];
+
     return {
       ...position,
       accuracyMeters: 5,
+      speedMetersPerSecond:
+        calculateDistanceMeters(previousPosition, position) / secondsBetweenSamples,
     };
   }
 }

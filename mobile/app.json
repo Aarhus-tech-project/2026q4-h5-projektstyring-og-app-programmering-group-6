@@ -10,6 +10,7 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "dk.loebeapp.mobile",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/android-icon-foreground.png",
@@ -25,7 +26,25 @@
       "expo-router",
       "expo-status-bar",
       "expo-secure-store",
-      "expo-sqlite"
-    ]
+      "expo-sqlite",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "enableMinifyInReleaseBuilds": false
+          }
+        }
+      ]
+    ],
+    "extra": {
+      "router": {
+        "asyncRoutes": {
+          "web": true
+        }
+      },
+      "eas": {
+        "projectId": "3cc359d2-29ca-4597-afd4-0337b054e045"
+      }
+    }
   }
 }
