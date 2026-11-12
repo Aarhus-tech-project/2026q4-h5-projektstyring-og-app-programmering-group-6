@@ -6,14 +6,17 @@ import type { Activity } from "../models/activity";
 import { ActivityManager } from "../managers/ActivityManager";
 import { ActivityRepository } from "../repositories/ActivityRepository";
 import { GpsPointRepository } from "../repositories/GpsPointRepository";
-import { MockGpsRecorder } from "../gps/MockGpsRecorder";
+import { DeviceGpsSource } from "../gps/DeviceGpsSource";
+import { GpsRecorder } from "../gps/GpsRecorder";
+import { MockGpsSource } from "../gps/MockGpsSource";
 import ActivityMap from "../components/ActivityMap";
 import ActivityPanel from "../components/ActivityPanel";
 import type { NewGpsPoint } from "../models/gpsPoint";
 import { mockRoute } from "../gps/mockRoute";
 import { router } from "expo-router";
-import { IconButton, useTheme } from "react-native-paper";
+import { IconButton, Text, useTheme } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import * as Location from "expo-location";
 
 export default function ActivityScreen() {
   const database = useSQLiteContext();
@@ -24,14 +27,17 @@ export default function ActivityScreen() {
   const [activity, setActivity] = useState<Activity | null>(null);
   const [loading, setLoading] = useState(false);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
-  const recorderRef = useRef<MockGpsRecorder | null>(null);
+  const recorderRef = useRef<GpsRecorder | null>(null);
+  const [usesDeviceGps, setUsesDeviceGps] = useState(false);
   const [distanceMeters, setDistanceMeters] = useState(0);
   const [currentPace, setCurrentPace] = useState<number | null>(null);
   const [gpsPoints, setGpsPoints] = useState<NewGpsPoint[]>([]);
 
   useEffect(() => {
     return () => {
-      void recorderRef.current?.stop();
+      const recorder = recorderRef.current;
+      recorderRef.current = null;
+      void recorder?.stop();
     };
   }, []);
 
@@ -55,32 +61,56 @@ export default function ActivityScreen() {
     return () => clearInterval(intervalId);
   }, [activity]);
 
-  async function handleStart() {
+  async function handleStart(source: "device" | "mock") {
     if (userId === null) {
       alert("Brugeren kunne ikke identificeres. Log ind igen.");
       return;
     }
 
+    if (recorderRef.current !== null) {
+      return;
+    }
+
+    const manager = new ActivityManager(
+      new ActivityRepository(database),
+      new GpsPointRepository(database),
+    );
+    const deviceSource = source === "device" ? new DeviceGpsSource() : null;
+    const recorder = new GpsRecorder(manager, deviceSource ?? new MockGpsSource());
+    recorderRef.current = recorder;
     setLoading(true);
+    let started = false;
 
     try {
-      const repository = new ActivityRepository(database);
-      const manager = new ActivityManager(
-        repository,
-        new GpsPointRepository(database),
-      );
+      if (deviceSource !== null) {
+        const permission = await Location.requestForegroundPermissionsAsync();
+        if (recorderRef.current !== recorder) {
+          return;
+        }
+
+        if (!permission.granted) {
+          alert("Giv LøbeApp adgang til din placering for at starte en aktivitet.");
+          return;
+        }
+
+        await deviceSource.start((reason) => alert(reason));
+        if (recorderRef.current !== recorder) {
+          return;
+        }
+      }
 
       const startedActivity = await manager.startActivity(userId);
+      if (recorderRef.current !== recorder) {
+        return;
+      }
+
+      setUsesDeviceGps(source === "device");
 
       setActivity(startedActivity);
 
       setDistanceMeters(0);
       setCurrentPace(null);
       setGpsPoints([]);
-
-      const recorder = new MockGpsRecorder(manager);
-
-      recorderRef.current = recorder;
 
       recorder.start(
         startedActivity.id,
@@ -99,15 +129,24 @@ export default function ActivityScreen() {
           alert(message);
         },
       );
+      started = true;
     } catch (error) {
-      const message =
-        error instanceof Error
-          ? error.message
-          : "Aktiviteten kunne ikke startes.";
-
-      alert(message);
+      if (recorderRef.current === recorder) {
+        const message =
+          error instanceof Error
+            ? error.message
+            : "Aktiviteten kunne ikke startes.";
+        alert(message);
+      }
     } finally {
-      setLoading(false);
+      if (recorderRef.current === recorder) {
+        if (!started) {
+          recorderRef.current = null;
+          void recorder.stop();
+        }
+
+        setLoading(false);
+      }
     }
   }
 
@@ -165,7 +204,16 @@ export default function ActivityScreen() {
 
   return (
     <View style={{ flex: 1 }}>
-      <ActivityMap initialPosition={mockRoute[0]} points={gpsPoints} />
+      {usesDeviceGps && gpsPoints.length === 0 ? (
+        <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+          <Text>Venter på GPS-position…</Text>
+        </View>
+      ) : (
+        <ActivityMap
+          initialPosition={gpsPoints[0] ?? mockRoute[0]}
+          points={gpsPoints}
+        />
+      )}
 
       <ActivityPanel
         activity={activity}
@@ -173,7 +221,8 @@ export default function ActivityScreen() {
         distanceMeters={distanceMeters}
         currentPace={currentPace}
         loading={loading}
-        onStart={handleStart}
+        onStart={() => handleStart("device")}
+        onStartMock={() => handleStart("mock")}
         onStop={handleStop}
       />
       {activity?.status !== "active" && (

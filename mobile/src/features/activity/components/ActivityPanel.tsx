@@ -10,6 +10,7 @@ type ActivityPanelProps = {
   currentPace: number | null;
   loading: boolean;
   onStart: () => Promise<void>;
+  onStartMock: () => Promise<void>;
   onStop: () => Promise<void>;
 };
 
@@ -20,6 +21,7 @@ export default function ActivityPanel({
   currentPace,
   loading,
   onStart,
+  onStartMock,
   onStop,
 }: ActivityPanelProps) {
   return (
@@ -45,14 +47,19 @@ export default function ActivityPanel({
       )}
 
       {activity === null && (
-        <Button
-          mode="contained"
-          onPress={onStart}
-          loading={loading}
-          disabled={loading}
-        >
-          Start aktivitet
-        </Button>
+        <>
+          <Button
+            mode="contained"
+            onPress={onStart}
+            loading={loading}
+            disabled={loading}
+          >
+            Start aktivitet
+          </Button>
+          <Button mode="outlined" onPress={onStartMock} disabled={loading}>
+            Start mock aktivitet
+          </Button>
+        </>
       )}
 
       {activity?.status === "active" && (
