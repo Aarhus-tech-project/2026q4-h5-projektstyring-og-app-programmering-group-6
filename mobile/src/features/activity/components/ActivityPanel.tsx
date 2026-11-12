@@ -1,7 +1,7 @@
 import { View } from "react-native";
 import { Button, Text } from "react-native-paper";
 import type { Activity } from "../models/activity";
-import { formatPace } from "../formatting/formatPace";
+import { formatPace } from "../../../formatting/formatPace";
 
 type ActivityPanelProps = {
   activity: Activity | null;

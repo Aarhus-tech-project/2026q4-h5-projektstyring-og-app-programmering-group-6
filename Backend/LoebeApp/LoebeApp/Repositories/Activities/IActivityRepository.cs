@@ -1,15 +1,16 @@
 ﻿using LoebeApp.Models.Activities;
+using LoebeApp.Models.Statistics;
 
 namespace LoebeApp.Repositories.Activities
 {
     public interface IActivityRepository
     {
         /// <summary>
-        /// Adds an activity and its GPS points asynchronously.
+        /// Saves an activity and updates personal records when the candidates are faster.
         /// </summary>
         /// <param name="activity">The activity to save.</param>
-        /// <returns>A task representing the asynchronous operation.</returns>
-        Task AddActivityAsync(Activity activity);
+        /// <param name="recordCandidates">The activity's best times for the record distances.</param>
+        Task AddActivityAsync(Activity activity, IReadOnlyList<PersonalRecord> recordCandidates);
 
         /// <summary>
         /// Gets the specified user's activities, ordered newest first.
@@ -25,5 +26,12 @@ namespace LoebeApp.Repositories.Activities
         /// <param name="userId">The owner's user ID.</param>
         /// <returns>The activity, or null if no matching activity exists.</returns>
         Task<Activity?> GetActivityByIdAsync(Guid activityId, int userId);
+
+        /// <summary>
+        /// Asynchronously retrieves activity statistics for the specified user.
+        /// </summary>
+        /// <param name="userId">The unique identifier of the user whose activity statistics are retrieved.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the user's activity statistics.</returns>
+        Task<ActivityStatistics> GetStatisticsAsync(int userId);
     }
 }

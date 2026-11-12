@@ -1,7 +1,7 @@
 import { View } from "react-native";
 import { Card, Text } from "react-native-paper";
 import type { ActivitySummaryResponse } from "../dtos/activity";
-import { formatPace } from "../formatting/formatPace";
+import { formatPace } from "../../../formatting/formatPace";
 
 type ActivitySummaryContentProps = {
   activity: ActivitySummaryResponse;
