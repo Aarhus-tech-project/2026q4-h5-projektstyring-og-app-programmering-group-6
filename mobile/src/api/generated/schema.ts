@@ -284,6 +284,54 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/activities/statistics": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ActivityStatisticsResponse"];
+                        "application/json": components["schemas"]["ActivityStatisticsResponse"];
+                        "text/json": components["schemas"]["ActivityStatisticsResponse"];
+                    };
+                };
+                /** @description Unauthorized */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ProblemDetails"];
+                        "application/json": components["schemas"]["ProblemDetails"];
+                        "text/json": components["schemas"]["ProblemDetails"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -300,6 +348,13 @@ export interface components {
             /** Format: double */
             averagePaceSeconds: null | number | string;
             gpsPoints: components["schemas"]["GpsPointResponse"][];
+        };
+        ActivityStatisticsResponse: {
+            /** Format: double */
+            totalDistanceMeters: number | string;
+            /** Format: int64 */
+            totalDurationSeconds: number | string;
+            personalRecords: components["schemas"]["PersonalRecordResponse"][];
         };
         ActivitySummaryResponse: {
             /** Format: uuid */
@@ -352,6 +407,16 @@ export interface components {
             accessToken: string;
             /** Format: date-time */
             expiresAtUtc: string;
+        };
+        PersonalRecordResponse: {
+            /** Format: int32 */
+            distanceMeters: number | string;
+            /** Format: int32 */
+            durationMilliseconds: number | string;
+            /** Format: double */
+            paceSecondsPerKilometer: number | string;
+            /** Format: uuid */
+            activityId: string;
         };
         ProblemDetails: {
             type?: null | string;

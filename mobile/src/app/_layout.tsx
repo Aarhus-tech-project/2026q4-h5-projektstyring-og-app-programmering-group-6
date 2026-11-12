@@ -30,6 +30,7 @@ export default function RootLayout() {
               />
               <Stack.Screen name="register" options={{ title: "LøbeApp" }} />
               <Stack.Screen name="activity" options={{ headerShown: false }} />
+              <Stack.Screen name="statistic" options={{ title: "Statistik" }} />
             </Stack>
           </AuthProvider>
         </SQLiteProvider>

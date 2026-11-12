@@ -98,6 +98,13 @@ export default function HomeScreen() {
         >
           Ny aktivitet
         </Button>
+        <Button
+          mode="outlined"
+          style={{ flex: 1 }}
+          onPress={() => router.push("/statistic")}
+        >
+          Statistik
+        </Button>
       </View>
     </View>
   );

@@ -1,5 +1,6 @@
 ﻿using LoebeApp.DTOs.Activities;
 using LoebeApp.Managers.Activities;
+using LoebeApp.DTOs.Statistics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
@@ -61,6 +62,20 @@ namespace LoebeApp.Controllers.Activities
             var activityDetails = await activityManager.GetActivityByIdAsync(activityId, userId);
 
             return Ok(activityDetails);
+        }
+
+        [HttpGet("statistics")]
+        [ProducesResponseType(typeof(ActivityStatisticsResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<ActivityStatisticsResponse>> GetStatisticsAsync()
+        {
+            if (!TryGetUserId(out var userId))
+            {
+                return Unauthorized();
+            }
+
+            var statistics = await activityManager.GetStatisticsAsync(userId);
+            return Ok(statistics);
         }
 
         private bool TryGetUserId(out int userId)

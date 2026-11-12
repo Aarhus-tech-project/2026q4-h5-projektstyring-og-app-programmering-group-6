@@ -3,6 +3,7 @@ using LoebeApp.Models.Users;
 using LoebeApp.Models.Activities;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using LoebeApp.Models.Statistics;
 
 namespace LoebeApp.Data
 {
@@ -16,6 +17,8 @@ namespace LoebeApp.Data
         public DbSet<User> Users { get; set; }
 
         public DbSet<Activity> Activities { get; set; }
+
+        public DbSet<PersonalRecord> PersonalRecords { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         { 
@@ -37,6 +40,14 @@ namespace LoebeApp.Data
                     json => JsonSerializer.Deserialize<List<GpsPoint>>(
                         json, (JsonSerializerOptions?)null) ?? new List<GpsPoint>())
                 .HasColumnType("jsonb");
+
+            modelBuilder.Entity<PersonalRecord>()
+                .HasKey(record => new { record.UserId, record.DistanceMeters });
+
+            modelBuilder.Entity<PersonalRecord>()
+                .HasOne<Activity>()
+                .WithMany()
+                .HasForeignKey(record => record.ActivityId);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using LoebeApp.DTOs.Activities;
+using LoebeApp.DTOs.Statistics;
 
 namespace LoebeApp.Managers.Activities
 {
@@ -29,5 +30,12 @@ namespace LoebeApp.Managers.Activities
         /// No matching activity belongs to the user.
         /// </exception>
         Task<ActivityDetailsResponse> GetActivityByIdAsync(Guid activityId, int userId);
+
+        /// <summary>
+        /// Asynchronously retrieves activity statistics for the specified user.
+        /// </summary>
+        /// <param name="userId">The unique identifier of the user.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the user's activity statistics.</returns>
+        Task<ActivityStatisticsResponse> GetStatisticsAsync(int userId);
     }
 }

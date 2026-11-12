@@ -1,7 +1,9 @@
-﻿using LoebeApp.DTOs.Activities;
+﻿using LoebeApp.Calculations.Activities;
+using LoebeApp.DTOs.Activities;
+using LoebeApp.DTOs.Statistics;
 using LoebeApp.Exceptions;
 using LoebeApp.Mappers.Activities;
-using LoebeApp.Models.Activities;
+using LoebeApp.Mappers.Statistics;
 using LoebeApp.Repositories.Activities;
 using System.ComponentModel.DataAnnotations;
 
@@ -11,6 +13,7 @@ namespace LoebeApp.Managers.Activities
         ( IActivityRepository activityRepository)
         : IActivityManager
     {
+        /// <inheritdoc/>
         /// <inheritdoc/>
         public async Task AddActivityAsync(CreateActivityRequest request, int userId)
         {
@@ -24,8 +27,9 @@ namespace LoebeApp.Managers.Activities
             }
 
             var activity = ActivityDtoToModel.Map(request, userId, averagePaceSeconds);
+            var recordCandidates = PersonalRecordCalculator.CalculateCandidates(activity);
 
-            await activityRepository.AddActivityAsync(activity);
+            await activityRepository.AddActivityAsync(activity, recordCandidates);
         }
 
         private static void ValidateActivityRequest(CreateActivityRequest request)
@@ -73,6 +77,25 @@ namespace LoebeApp.Managers.Activities
             var activityDetails = ActivityModelToDto.MapToDetails(activity);
 
             return activityDetails;
+        }
+
+        /// <inheritdoc/>
+        public async Task<ActivityStatisticsResponse> GetStatisticsAsync(int userId)
+        {
+            var statistics = await activityRepository.GetStatisticsAsync(userId);
+            var personalRecords = new List<PersonalRecordResponse>();
+
+            foreach (var record in statistics.PersonalRecords)
+            {
+                var durationSeconds = record.DurationMilliseconds / 1000.0;
+                var distanceKilometers = record.DistanceMeters / 1000.0;
+                var paceSecondsPerKilometer = durationSeconds / distanceKilometers;
+
+                personalRecords.Add(
+                    ActivityStatisticsModelToDto.MapPersonalRecord(record, paceSecondsPerKilometer));
+            }
+
+            return ActivityStatisticsModelToDto.Map(statistics, personalRecords);
         }
     }
 }
