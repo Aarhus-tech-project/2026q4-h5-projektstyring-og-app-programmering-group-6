@@ -1,0 +1,98 @@
+﻿Produktrapport – LøbeApp
+Mikkel Jepsen
+18/11/2026
+
+ Indholdsfortegnelse
+1	Indledning og formål	3
+2	Kravspecifikation	3
+2.1	Prioritering og afgrænsning	3
+2.2	Funktionelle krav	3
+2.2.1	Must have	3
+2.2.2	Should have	4
+2.2.3	Could have	4
+2.3	Ikke-funktionelle krav	4
+2.3.1	Must have	4
+2.3.2	Should have	4
+2.3.3	Could have	5
+
+
+ 1	Indledning og formål
+LøbeApp er en mobilapplikation til personer, der vil registrere løbe- og gåture. Under en tur viser appen ruten på et kort sammen med den forløbne tid, den tilbagelagte distance og det aktuelle tempo målt i minutter pr. kilometer. Efter turen kan brugeren se sit gennemsnitlige tempo, tilbagelagt distance, rute og genfinde turen i sin aktivitetshistorik.
+Formålet med projektet er at gøre det nemt for motionister at tracke og få et overblik over deres aktiviteter og følge deres egne resultater over tid. Appen er inspireret af Strava og fokuserer på brugerens egne ture, fremskridt og personlige rekorder.
+2	Kravspecifikation
+2.1	Prioritering og afgrænsning
+Jeg brugte MoSCoW til at prioritere projektets krav. Must-kravene udgjorde hovedleverancen. Should-kravene var ønskede udvidelser, mens Could-kravene havde lavere prioritet og kunne tages op, hvis der var tid.
+2.2	Funktionelle krav
+2.2.1	Must have
+Id	Krav	Implementeret
+K1	Brugeren skal kunne oprette en konto med e-mail og password. Password skal indeholde mindst 10 tegn, mindst et stort og lille bogstav, et tal og et specialtegn.	✓
+K2	Brugeren skal kunne logge ind med sine oplysninger.	✓
+K3	Brugeren skal kunne logge ud.	✓
+K4	Brugeren må kun kunne tilgå sine egne data.	✓
+K5	Brugeren skal kunne starte en aktivitets-registrering.	✓
+K6	Brugeren skal kunne se forløbet tid under aktiviteten.	✓
+K7	Brugeren skal kunne se tilbagelagt distance i kilometer.	✓
+K8	Brugeren skal kunne se sin aktuelle pace i min/km.	✓
+K9	Brugeren skal kunne se sin gennemsnitlige pace efter afslutning.	✓
+K10	Brugeren skal kunne afslutte og gemme en aktivitet.	✓
+K11	Appen skal kunne simulere en GPS-Registrering ved hjælp af mock-data.	✓
+K12	Brugeren skal kunne se en liste over tidligere aktiviteter.	✓
+K13	Brugeren skal kunne åbne en tidligere aktivitet og se dens detaljer.	✓
+K14	Aktiviteter skal vise dato, distance, varighed, rute og gennemsnitlig pace.	✓
+K15	Brugeren skal kunne se sin rute på et kort under en aktivitet.	✓
+
+2.2.2	Should have
+Id	Krav	Implementeret
+K17	Appen skal kunne registrere aktiviteter ved hjælp af telefonens GPS.	✓
+K18	Appen skal udelade GPS-målinger med ugyldige koordinater eller en angivet positionsusikkerhed over 20 meter fra ruteregistrering og distanceberegning.	✓
+K19	Brugeren skal kunne se sin samlede tilbagelagte distance.	✓
+K20	Brugeren skal kunne se sine personlige rekorder for distancer på 1 km, 3 km, 5 km, og 10 km, angivet i både samlet tid og pace.	✓
+
+2.2.3	Could have
+Id	Krav	Implementeret
+K21	Brugeren skal kunne se sin udvikling i distance og pace gennem grafer.	x
+K22	Brugeren skal kunne se kilometertider for en aktivitet, feks pace for hver km på en 5 km tur.	x
+K23	Brugeren skal kunne registrere og afslutte en aktivitet uden forbindelse til backend.	✓
+K24	Appen skal kunne gemme afsluttede aktiviter lokal, indtil forbindelsen til backend er genetableret.	✓
+K25	Appen skal kunne synkronisere lokalt gemte aktiviteter med backend, når forbindelsen er genetableret.	x
+K26	Appen skal kunne fortsætte GPS-registrering og gemme data i SQLite, når telefonen er låst.	x
+
+2.3	Ikke-funktionelle krav
+2.3.1	Must have
+Id	Krav	Implementeret
+K27	Brugerens password skal hashes.
+	✓
+K28	API’et skal anvende tokenbaseret autentifikation til beskyttede endpoints.	✓
+K29	Tokens skal opbevares sikkert på telefonen.	✓
+K30	Backend skal validere indgående data, inden de behandles og gemmes.	✓
+K31	Applikationen skal håndtere fejl uden at lukke uventet.	✓
+
+2.3.2	Should have
+Id	Krav	Implementeret
+K32	Appen skal forsøge at registrere GPS-positioner med ca. 2 sekunders interval.	✓
+
+2.3.3	Could have
+Id	Krav	Implementeret
+K33	Backend og database skal kunne hostes i cloud så mobilappen kan benyttes uden forbindelse til udviklingscomputeren.	✓
+
+3	Arkitektur og design
+3.1	Mobilapp
+Mobilappen er bygget med React Native, TypeScript og Expo. Expo Router styrer navigationen mellem skærmene, React Native Paper bruges til brugerfladens komponenter, og react-native-maps viser ruten på et kort. Fra forsiden kan brugeren starte en ny tur, åbne en tidligere tur fra historikken eller se sin statistik. Efter login gemmer appen brugerens adgangstoken og dets udløbstid i Expo SecureStore.
+Brugeren kan vælge mellem telefonens GPS i forgrunden og en simuleret rute. Begge bruger samme registreringsforløb. Under turen viser appen den registrerede rute, den forløbne tid, distancen og det aktuelle tempo i minutter pr. kilometer. Appen beregner distancen ud fra de registrerede GPS-punkter og det aktuelle tempo ud fra punkterne fra cirka de seneste ti sekunder.
+Når brugeren afslutter turen, stopper appen registreringen og sender aktiviteten og GPS-punkterne til serveren. Når turen er gemt, åbner appen detaljeskærmen. Det er den samme skærm, brugeren ser, når en tur åbnes fra historikken.
+ 
+3.2	Backend
+Backenden er bygget som et REST API i C# med ASP.NET Core og bruger Entity Framework Core til at læse og gemme data i PostgreSQL. Backenden håndterer brugerkonti, adgangskontrol og aktivitetsdata. Koden er opdelt efter, hvilket ansvar hver del har. API’et kører i en Docker-container på Hostless, så mobilappen kan bruge API’et, selv når udviklingscomputeren er slukket.
+Controllerne modtager forespørgsler fra appen og sender dem videre til den relevante manager. Når forespørgslen er behandlet, sender controlleren svaret og den tilhørende HTTP-statuskode tilbage til appen.
+Managerne håndterer regler, validering og beregninger. De bruger mappers til at omforme data og repositories til at hente eller gemme dem.
+Mapperne omformer de data, API’et modtager, til de modeller, backenden arbejder med. De omformer også modellerne til det format, API’et sender tilbage til appen.
+Repositories står for kommunikationen med databasen. De udfører de nødvendige opslag og gemmer data, så managerne kan arbejde med dem uden selv at håndtere databasekaldene.
+3.3	Databaser
+LøbeApp bruger SQLite på telefonen og PostgreSQL på serveren. SQLite gemmer data under registreringen af en tur, mens PostgreSQL gemmer brugerkonti, afsluttede aktiviteter og personlige rekorder.
+I SQLite er data fordelt på tabellerne Activity og GpsPoint. Når en tur starter, gemmer appen aktivitetens id, brugerens id, starttidspunkt og status i Activity. Varigheden gemmes først som 0 sekunder og opdateres, når turen afsluttes. Hvert GPS-punkt gemmes i GpsPoint med koordinater, positionsusikkerhed, tid siden start og en reference til aktiviteten. Når serveren har bekræftet lagringen, sletter appen den lokale aktivitet, og SQLite sletter de tilhørende GPS-punkter. Hvis uploaden fejler, bliver begge dele liggende på telefonen.
+I PostgreSQL er data fordelt på tabellerne Users, Activities og PersonalRecords. En bruger kan have flere aktiviteter, og hver aktivitet tilhører én bruger. Rutens GPS-punkter ligger samlet i et JSONB-felt på aktiviteten. Hver bruger kan have én rekord pr. distance, og rekorden henviser til den aktivitet, hvor den blev sat.
+Under udviklingen kørte PostgreSQL 18 lokalt i en Docker-container. På Hostless bruger API’et en separat PostgreSQL 17-database.
+3.3.1	PostgreSQL diagram
+ 
+3.3.2	SQLite diagram
+ 
